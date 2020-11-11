@@ -1,18 +1,18 @@
-var test = require('tape')
-var u = require('../')
+const test = require('tape')
+const u = require('../')
 
 test('toHash', function (t) {
   t.throws(function () { u.toHash('012345') }, 'throws for invalid hash length')
   t.throws(function () { u.toHash('') }, 'throws for empty string')
-  var actual = u.toHash('ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff00')
-  var expected = new Buffer([
+  const actual = u.toHash('ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff00')
+  const expected = Buffer.from([
     0, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255
   ])
   t.equal(actual.compare(expected), 0)
   t.end()
 })
 
-var targets = [
+const targets = [
   {
     compact: 0x1d00ffff,
     expanded: '00000000ffff0000000000000000000000000000000000000000000000000000'
@@ -41,7 +41,7 @@ var targets = [
 test('compressTarget', function (t) {
   t.test('compress targets', function (t) {
     targets.forEach(function (target) {
-      var buf = new Buffer(target.expanded, 'hex')
+      const buf = Buffer.from(target.expanded, 'hex')
       t.equal(u.compressTarget(buf), target.compact, target)
     })
     t.end()
@@ -54,7 +54,7 @@ test('compressTarget', function (t) {
   })
   t.test('invalid length', function (t) {
     t.throws(function () {
-      u.compressTarget(new Buffer('test'))
+      u.compressTarget(Buffer.from('test'))
     })
     t.end()
   })
